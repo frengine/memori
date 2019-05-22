@@ -1,0 +1,33 @@
+div.card {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+
+	margin: 5px;
+
+	vertical-align: middle;
+}
+
+div.card span.inactiveContent {
+	display: block;
+}
+
+div.card span.activeContent {
+	display: none;
+}
+
+div.card.show span.inactiveContent {
+	display: none !important;
+}
+
+div.card.show span.activeContent {
+	display: block !important;
+}
+
+div.card span {
+	height: 100%;
+	width: 100%;
+	line-height: 50px;
+
+	border-radius: 5px;
+}

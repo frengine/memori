@@ -1,0 +1,25 @@
+
+
+/* old */
+
+body {
+    width: 90vw;
+    height: 90vh;
+    padding: 0;
+    margin: 0;
+    font-family: Skia, Verdana, sans-serif;
+    text-align: center;
+    perspective: 800px;
+}
+
+header.span {
+    display: table-cell;
+}
+
+#sidebar {
+	position: fixed;
+	right: 10vw;
+	top: 10vw;
+	width: 13vw;
+	height: 70vh;
+}

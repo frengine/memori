@@ -1,0 +1,4 @@
+<div class="card inactive" [ngClass]="{'show':show}" (click)="cardClicked()">
+	<span class="inactiveContent content" [style.background-color]="backColour">{{ placeholder }}</span>
+	<span class="activeContent content" [style.background-color]="frontColour">{{ letter }}</span>
+</div>
