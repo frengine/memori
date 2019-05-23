@@ -6,6 +6,7 @@ import { BoardComponent } from './board/board.component';
 import { TileComponent } from './board/tile/tile.component';
 import { ProgressbarComponent } from './progressbar/progressbar.component';
 import { ColorsComponent } from './colors/colors.component';
+import { HighscoreComponent } from './highscore/highscore.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ColorsComponent } from './colors/colors.component';
     TileComponent,
     ProgressbarComponent,
     ColorsComponent,
+    HighscoreComponent,
   ],
   imports: [
     BrowserModule

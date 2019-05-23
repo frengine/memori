@@ -20,6 +20,7 @@ header.span {
 	position: fixed;
 	right: 10vw;
 	top: 10vw;
-	width: 13vw;
+	width: 300px;
 	height: 70vh;
+	text-align: left;
 }

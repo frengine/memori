@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { TileComponent } from "./tile/tile.component";
 import { BoardService } from "../board.service";
 
@@ -10,21 +10,30 @@ import { BoardService } from "../board.service";
 export class BoardComponent implements OnInit {
 	constructor(private boardService: BoardService) { }
 
-	size = 6
-	letterArray = "AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ".substring(0, this.size * this.size).split('')
+	@Input()
+	boardSize = 6
+
+	letterArray = []
 
 	rows = []
 
 	foundAmount = 0
 
-	elapsedTime = "nog niet begonnen"
+	defaultElapsedTime = "nog niet begonnen"
+
+	elapsedTime = this.defaultElapsedTime
+
+	@Input()
+	cardBackChar = "-"
 
 	ngOnInit() {
+		this.letterArray = "AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ".substring(0, this.boardSize * this.boardSize).split('')
+		this.letterArray = this.shuffle(this.letterArray)
+
 		let idx = 0
-		  //this.letterArray = this.shuffle(this.letterArray)
-		for (let x = 0; x < this.size; x++) {
+		for (let x = 0; x < this.boardSize; x++) {
 			let cols = []
-			for (let y = 0; y < this.size; y++) {
+			for (let y = 0; y < this.boardSize; y++) {
 				cols.push({
 					"num": y,
 					"val": this.letterArray[idx++],
@@ -36,11 +45,19 @@ export class BoardComponent implements OnInit {
 			})
 		}
 
-		this.boardService.getFoundSubject().subscribe(() => {
+		this.boardService.getFoundSubject().subscribe((letter) => {
+			if (letter == "-1") {
+				// Reset
+				this.foundAmount = 0
+			}
 			this.foundAmount++
 		})
 
 		this.boardService.getElapsedSecondsSubject().subscribe((secs) => {
+			if (secs == -1) {
+				// Reset
+				this.defaultElapsedTime
+			}
 			this.elapsedTime = secs + " seconden"
 		})
 	}

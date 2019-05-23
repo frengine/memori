@@ -2,6 +2,6 @@ Verlopen tijd: {{elapsedTime}}<br />
 Gevonden kaart-paren: {{foundAmount}}
 <div id="speelveld">
 	<div id="row" *ngFor="let row of rows">
-		<app-tile *ngFor="let col of row.columns" class="inactive"  [letter]=col.val [x]=row.num [y]=col.num></app-tile>
+		<app-tile *ngFor="let col of row.columns" class="inactive"  [letter]=col.val [x]=row.num [y]=col.num [backChar]="cardBackChar"></app-tile>
 	</div>
 </div>

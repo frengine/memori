@@ -21,11 +21,11 @@ export class TileComponent implements OnInit {
 	@Input()
 	y: number
 
+	@Input()
+	backChar: string
+
 	show = false
 	found = false
-
-	// TODO: Make this dynamic
-	placeholder = "#"
 
 	constructor(private boardService: BoardService, private colorsService: ColorsService) { }
 
@@ -44,6 +44,12 @@ export class TileComponent implements OnInit {
 					this.found = true
 					this.show = true
 					this.frontColour = this.foundColour
+				}
+				if (foundLetter == "-1") {
+					// Reset
+
+					this.found = false
+					this.show = false
 				}
 			}
 		)
@@ -71,6 +77,10 @@ export class TileComponent implements OnInit {
 	}
 
 	cardClicked() {
+		if (this.found) {
+			return
+		}
+
 		this.boardService.cardClicked(this.x, this.y, this.letter)
 
 		this.show = true
