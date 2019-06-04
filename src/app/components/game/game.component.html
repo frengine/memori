@@ -1,0 +1,32 @@
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <div id="sidebar">
+	  <app-highscore></app-highscore>
+	  <app-colors></app-colors>
+
+	  	<b>Card back:</b>
+		<select name="character" id="character" #character>
+			<option value="*">*</option>
+			<option value="#">#</option>
+			<option value="@">@</option>
+			<option value="&">&</option>
+			<option value="%">%</option>
+			<option value="X">X</option>
+		</select>
+		<br>
+		<b>Board size:</b>
+		<select name="size" id="size" #boardsize>
+			<option value=2>2</option>
+			<option value=4>4</option>
+			<option value=6 selected>6</option>
+		</select>
+		<button (click)="newGame(character.value, boardsize.value)">New game</button>
+  </div>
+<div id="main">
+	<app-progressbar></app-progressbar>
+	<div>
+		<app-board *ngIf="boardFlag" (cardClickedEvent)="cardClicked($event)" [cardBackChar]="cardBackChar" [boardSize]="boardSize"></app-board>
+	</div>
+</div>
