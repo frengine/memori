@@ -26,6 +26,19 @@ export class AuthenticationService {
         }
     }
 
+    async register(name: string, password: string) {
+        try {
+            const res = await this.http.post<any>(`http://localhost:5000/api/user`, { name, password }).toPromise()  
+            console.log(res)
+
+            alert("User created, please login")
+
+        } catch (err) {
+            console.log(err)
+            alert(err.error.message || "Unkown error (server down?)")
+        }
+    }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser')

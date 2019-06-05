@@ -8,6 +8,8 @@
 <div *ngIf="!auth.currentUser">
 
     <input type="text" #name>
-    <input type="password" #password>
+    <input type="password" #password (keyup.enter)="auth.login(name.value, password.value)">
     <button (click)="auth.login(name.value, password.value)">login</button>
+    of
+    <button (click)="auth.register(name.value, password.value)">registreer</button>
 </div>
