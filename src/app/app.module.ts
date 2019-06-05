@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
@@ -10,7 +11,14 @@ import { ColorsComponent } from './colors/colors.component';
 import { HighscoreComponent } from './highscore/highscore.component';
 import { HeaderComponent } from './components/header/header.component';
 import { GameComponent } from './components/game/game.component';
-import { LoginComponent } from './components/login/login.component';
+
+
+import { routing } from './app.routing';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { fakeBackendProvider } from './_helpers/fake-backend';
 
 @NgModule({
   declarations: [
@@ -22,13 +30,21 @@ import { LoginComponent } from './components/login/login.component';
     HighscoreComponent,
     HeaderComponent,
     GameComponent,
+    HomeComponent,
     LoginComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    routing
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
+    fakeBackendProvider
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
