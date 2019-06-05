@@ -17,7 +17,9 @@ db.run(`
         
         FOREIGN KEY(gameId) REFERENCES games(id),
 
-        FOREIGN KEY(userId) REFERENCES users(id)
+        FOREIGN KEY(userId) REFERENCES users(id),
+
+        PRIMARY KEY (gameId, userId)
     )
 `)
 
@@ -55,7 +57,7 @@ function getHighscores(gameId) {
             LIMIT 10`, 
             
             [gameId], (err, rows) => {
-                
+
             err && console.log(err)
 
             resolve(rows || [])
@@ -75,7 +77,13 @@ function getUserScores(userId) {
 }
 
 function saveUserScore(userId, gameId, score) {
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
+
+        if (((await getUserScores(userId)).find(s => s.gameId == gameId) || {}).score <= score) {
+            console.log("previous score was better")
+            return resolve(true)
+        }
+
         db.run(`
             INSERT OR REPLACE INTO topscores (score, gameId, userId) VALUES (?, ?, ?)
         `, [score, gameId, userId], err => {
