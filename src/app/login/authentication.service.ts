@@ -14,7 +14,7 @@ export class AuthenticationService {
 
     async login(name: string, password: string) {
         try {
-            const res = await this.http.post<any>(`http://localhost:5000/api/login`, { name, password }).toPromise()  
+            const res = await this.http.post(`http://localhost:5000/api/login`, { name, password }).toPromise()  
             console.log(res)
 
             this.currentUser = res.user
@@ -28,10 +28,23 @@ export class AuthenticationService {
 
     async register(name: string, password: string) {
         try {
-            const res = await this.http.post<any>(`http://localhost:5000/api/user`, { name, password }).toPromise()  
+            const res = await this.http.post(`http://localhost:5000/api/user`, { name, password }).toPromise()  
             console.log(res)
 
             alert("User created, please login")
+
+        } catch (err) {
+            console.log(err)
+            alert(err.error.message || "Unkown error (server down?)")
+        }
+    }
+
+    async updateUser(name?: string, password?: string) {
+        try {
+            const res = await this.http.put(`http://localhost:5000/api/user`, { name, password }).toPromise()  
+            console.log(res)
+
+            alert("User updated")
 
         } catch (err) {
             console.log(err)
@@ -43,5 +56,6 @@ export class AuthenticationService {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser')
         this.currentUser = null
+        window.location.reload()
     }
 }

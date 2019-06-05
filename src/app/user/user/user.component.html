@@ -1,0 +1,12 @@
+<h5>Gegevens veranderen:</h5>
+naam veranderen (optioneel):
+<input type="text" #name>
+
+<br>
+
+wachtwoord veranderen (optioneel):
+<input type="password" #password (keyup.enter)="auth.updateUser(name.value, password.value)">
+
+<br><br>
+
+<button (click)="auth.updateUser(name.value, password.value)">opslaan</button>

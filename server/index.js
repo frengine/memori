@@ -9,7 +9,8 @@ const privateKey = fs.readFileSync('./private.pem', 'utf8');
 const publicKey = fs.readFileSync('./public.pem', 'utf8');
 
 const checkIfAuthenticated = expressJwt({
-    secret: publicKey
+    secret: publicKey,
+    userProperty: 'payload'
 });
 
 const signOptions = {
@@ -25,7 +26,8 @@ const app = express();
 
 app.use((_req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type")
+    res.header("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS")
+    res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
     next()
 })
 
@@ -50,7 +52,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     if (user.password === req.body.password) {
-        let payload = { name, id: user.id };
+        let payload = { id: user.id };
         let token = jwt.sign(payload, privateKey, signOptions);
         res.json({
             message: 'ok',
@@ -80,6 +82,27 @@ app.post('/api/user', async (req, res) => {
 
     if (await users.saveUser({
         id: Math.floor(Math.random() * 99999999),
+        name, password
+    }))
+        res.json({ message: 'ok' })
+    else
+        res.status(500).json({ message: "something went wrong" })
+})
+
+app.put('/api/user', checkIfAuthenticated, async (req, res) => {
+
+    let user = await users.getUserById(req.payload.id)
+
+    const name = req.body.name || user.name
+    const password = req.body.password || user.password
+
+    console.log(name, password)
+
+    if (name.toLowerCase() != user.name.toLowerCase() && await users.getUserByName(name))
+        return res.status(401).json({ message: "Name already taken" })
+
+    if (await users.saveUser({
+        id: user.id,
         name, password
     }))
         res.json({ message: 'ok' })

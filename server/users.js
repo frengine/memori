@@ -3,7 +3,7 @@ const db = require("./db")
 
 db.run(`
     CREATE TABLE IF NOT EXISTS users (
-        id TEXT,
+        id TEXT PRIMARY KEY,
         name TEXT,
         password TEXT
     )
@@ -15,6 +15,19 @@ function getUserByName(name) {
         db.get(`
             SELECT * FROM users WHERE name IS ?
         `, [name], (err, user) => {
+    
+            err && console.log(err)
+            resolve(user)
+        })
+    })
+}
+
+function getUserById(id) {
+    return new Promise(resolve => {
+
+        db.get(`
+            SELECT * FROM users WHERE id IS ?
+        `, [id], (err, user) => {
     
             err && console.log(err)
             resolve(user)
@@ -37,5 +50,5 @@ function saveUser(user) {
 }
 
 module.exports = {
-    getUserByName, saveUser
+    getUserByName, saveUser, getUserById
 }

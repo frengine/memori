@@ -17,6 +17,7 @@ import { routing } from './app.routing';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { UserComponent } from './user/user/user.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     GameComponent,
     HomeComponent,
     LoginComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,

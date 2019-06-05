@@ -1,4 +1,9 @@
 <nav>
   <a class="left" routerLink="/" routerLinkActive="active">Home</a>
-  <a class="right" (click)="auth.logout()">Logout</a>
+
+  <a *ngIf="auth.currentUser" class="left" routerLink="/user" routerLinkActive="active">User</a>
+
+  <a *ngIf="auth.currentUser" class="right" (click)="auth.logout()">Logout</a>
+
+  <a *ngIf="!auth.currentUser" class="right" routerLink="/login">Login</a>
 </nav>
