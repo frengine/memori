@@ -1,34 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import {  Subject } from 'rxjs';
+import { AuthenticationService } from './login/authentication.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class HighscoreService {
-	highscore = [{
-		"name": "Wubbe",
-		"score": 6,
-	}, {
-		"name": "De Wuko's",
-		"score": 532,
-	}]
 
 	highscoreSubject = new Subject()
 
-	constructor() { }
+	constructor(
+        private auth: AuthenticationService,
+        private http: HttpClient
+    ) {
+        this.getHighscores()
+    }
 
-	addItem(name: string, score: number) {
-		this.highscore.push(
-			{"name": name, "score": score})
-		this.highscore.sort(
-			(a, b) => {
-				return a.score - b.score
-			})
-		// TODO: Cut at five.
-		this.highscoreSubject.next(this.highscore)
+	async addItem(score: number) {
+        
+        await this.http.post("http://localhost:5000/api/myscores/01", { score }).toPromise()
+
+        this.getHighscores()
+		
 	}
 
-	getHighscore() {
-		return this.highscore
+	async getHighscores() {
+        
+        const scores = await this.http.get("http://localhost:5000/api/topscores/01").toPromise()
+        
+        this.highscoreSubject.next(scores)
 	}
 }

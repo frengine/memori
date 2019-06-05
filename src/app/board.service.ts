@@ -109,8 +109,7 @@ export class BoardService {
 		clearInterval(this.elapsedSecondsInterval)
 
 		alert("Je hebt het spel gewonnen in " + this.elapsedSeconds + " seconden!")
-		let name = prompt("Wat is je naam?")
-		this.highscoreService.addItem(name, this.elapsedSeconds)
+		this.highscoreService.addItem(this.elapsedSeconds)
 	}
 
 	newGame(boardSize) {

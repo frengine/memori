@@ -6,12 +6,8 @@ import { HighscoreService } from "../highscore.service";
 	templateUrl: './highscore.component.html',
 	styleUrls: ['./highscore.component.css']
 })
-export class HighscoreComponent implements OnInit {
-	highscore = []
+export class HighscoreComponent {
 
-	constructor(private highscoreService: HighscoreService) { }
+	constructor(public highscoreService: HighscoreService) { }
 
-	ngOnInit() {
-		this.highscore = this.highscoreService.getHighscore()
-	}
 }

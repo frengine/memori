@@ -19,6 +19,7 @@ const signOptions = {
 };
 
 const users = require('./users')
+const games = require('./games')
 
 // Express
 
@@ -110,6 +111,38 @@ app.put('/api/user', checkIfAuthenticated, async (req, res) => {
         res.status(500).json({ message: "something went wrong" })
 })
 
+app.get('/api/user/:id', async (req, res) => {
+    const user = await users.getUserById(req.params.id)
+    if (user)
+        res.json({id: user.id, name: user.name})
+    else
+        res.status(401).json({ message: "User does not exist" })
+})
+
+app.get('/api/games', async (req, res) =>
+    res.json(await games.getGames())
+)
+
+app.get('/api/games/:id', async (req, res) => {
+    const game = (await games.getGames()).find(g => g.id == req.params.id)
+    if (game)
+        res.json(game)
+    else
+        res.status(401).json({ message: "Game does not exist" })
+})
+
+app.get('/api/topscores/:gameId', async (req, res) => res.json(await games.getHighscores(req.params.gameId)))
+
+app.get('/api/myscores/:userId', async (req, res) => res.json(await games.getUserScores(req.params.userId)))
+
+app.post('/api/myscores/:gameId', checkIfAuthenticated, async (req, res) => {
+
+    if (await games.saveUserScore(req.payload.id, req.params.gameId, Number(req.body.score)))
+        res.json({ message: 'ok' })
+    else
+        res.status(401).json({ message: "Something went wrong. Is the gameId incorrect?" })
+})
+
 app.route('/api/secret')
     .get(checkIfAuthenticated, function (req, res) {
         res.json({ message: "Success! You can not see this without a token" });
@@ -121,3 +154,10 @@ app.listen(PORT, function () {
     console.log("Express starting listening on port " + PORT)
     console.log("Express running")
 });
+
+setTimeout(async () => {
+
+    console.log("games:", await games.getGames())
+    console.log("highscores memory:", await games.getHighscores("01"))
+
+}, 100)

@@ -14,7 +14,7 @@ export class AuthenticationService {
 
     async login(name: string, password: string) {
         try {
-            const res = await this.http.post(`http://localhost:5000/api/login`, { name, password }).toPromise()  
+            const res = await this.http.post<any>(`http://localhost:5000/api/login`, { name, password }).toPromise()  
             console.log(res)
 
             this.currentUser = res.user

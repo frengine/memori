@@ -1,1 +1,2 @@
-﻿<app-game></app-game>
+﻿
+<a *ngFor="let game of games" [routerLink]="game.url">{{game.name}}</a>
