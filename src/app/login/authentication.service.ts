@@ -1,42 +1,34 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { User } from './user';
 
-
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+
+    public currentUser: User
 
     constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
+        this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
     }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
-    }
+    async login(name: string, password: string) {
+        try {
+            const res = await this.http.post<any>(`http://localhost:5000/api/login`, { name, password }).toPromise()  
+            console.log(res)
 
-    login(username: string, password: string) {
-        return this.http.post<any>(`http://localhost:4000/users/authenticate`, { username, password })
-            .pipe(map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
-                }
+            this.currentUser = res.user
+            localStorage.setItem("currentUser", JSON.stringify(this.currentUser))
 
-                return user;
-            }));
+        } catch (err) {
+            console.log(err)
+            alert(err.error.message || "Unkown error (server down?)")
+        }
     }
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
+        localStorage.removeItem('currentUser')
+        this.currentUser = null
     }
 }

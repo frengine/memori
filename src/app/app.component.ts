@@ -11,13 +11,10 @@ import { AuthenticationService } from './login/authentication.service';
 export class AppComponent {
 	title = 'Memori';
 
-	currentUser: User;
-
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService
     ) {
-        this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     }
 
     logout() {

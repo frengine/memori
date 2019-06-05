@@ -27,10 +27,13 @@ const signOptions = {
 
 const app = express();
 
-//parse usual forms
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use((_req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type")
+    next()
+})
+
+app.use(bodyParser());
 
 //parse json for APIs
 app.use(bodyParser.json());
@@ -55,8 +58,13 @@ app.post('/api/login', function (req, res) {
     let token = jwt.sign(payload, privateKey, signOptions);
     res.json({
       message: 'ok',
-      token: token,
-      expiresIn: jwt.decode(token).exp
+      expiresIn: jwt.decode(token).exp,
+      
+      user: {
+        name: user.name,
+        id: user.id,
+        token,
+      }
     });
   } else {
     res.status(401).json({ message: 'password did not match' });
